@@ -1,6 +1,8 @@
 import { HeroSection } from './components/HeroSection';
 import { SponsorMarquee } from './components/SponsorMarquee';
+import { FeaturesOverview } from './components/FeaturesOverview';
 import { FeatureGrid } from './components/FeatureGrid';
+import { ImpactSection } from './components/ImpactSection';
 
 export default function Home() {
   return (
@@ -18,7 +20,9 @@ export default function Home() {
       <div className="relative z-10">
         <HeroSection />
         <SponsorMarquee />
+        <FeaturesOverview />
         <FeatureGrid />
+        <ImpactSection />
       </div>
     </div>
   );

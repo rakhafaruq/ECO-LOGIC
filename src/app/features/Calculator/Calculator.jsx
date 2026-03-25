@@ -13,20 +13,20 @@ export default function Calculator() {
   const calcEmissions = () => {
     let results = { total: 0 };
     
-    // YouTube
+    // YouTube (menit/hari → jam, lalu kalikan faktor per jam)
     const ytMins = parseFloat(data.youtube_duration || 0);
     const ytQuality = data.youtube_quality || '1080p';
     const ytHrs = ytMins / 60;
-    results.youtube = ytHrs * 365 * (FACTORS.youtube[ytQuality] || 0.2);
+    results.youtube = ytHrs * (FACTORS.youtube[ytQuality] || 0.2);
     
-    // Streaming & Social
-    results.streaming = ((parseFloat(data.streaming_netflix || 0) * FACTORS.streaming.netflix) + (parseFloat(data.streaming_spotify || 0) * FACTORS.streaming.spotify)) * 365;
-    results.social = ((parseFloat(data.social_tiktok || 0) * FACTORS.social.tiktok) + (parseFloat(data.social_instagram || 0) * FACTORS.social.instagram)) * 365;
+    // Streaming & Social (jam/hari × faktor per jam)
+    results.streaming = (parseFloat(data.streaming_netflix || 0) * FACTORS.streaming.netflix) + (parseFloat(data.streaming_spotify || 0) * FACTORS.streaming.spotify);
+    results.social = (parseFloat(data.social_tiktok || 0) * FACTORS.social.tiktok) + (parseFloat(data.social_instagram || 0) * FACTORS.social.instagram);
     
-    // Work
-    results.work = ((parseFloat(data.work_zoom || 0) * FACTORS.work.zoom) + (parseFloat(data.work_emails || 0) * FACTORS.work.email)) * 365;
-    results.work += parseFloat(data.work_cloud || 0) * FACTORS.work.cloud_gb * 12; // monthly to yearly
-    results.work += (parseFloat(data.work_ai || 0) * FACTORS.ai.chatgpt) * 365;
+    // Work (jam/hari × faktor per jam, cloud GB dibagi 30 untuk harian)
+    results.work = (parseFloat(data.work_zoom || 0) * FACTORS.work.zoom) + (parseFloat(data.work_emails || 0) * FACTORS.work.email);
+    results.work += parseFloat(data.work_cloud || 0) * FACTORS.work.cloud_gb / 30; // GB bulanan → harian
+    results.work += parseFloat(data.work_ai || 0) * FACTORS.ai.chatgpt;
     
     results.total = Object.values(results).reduce((a, b) => a + b, 0);
     setEmissions(results);
@@ -172,7 +172,7 @@ export default function Calculator() {
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                         </div>
-                        <span className="text-sm text-emerald-800/60 font-medium">Draft Emisi: <strong className="text-emerald-700 font-black">{(emissions.total).toLocaleString('id-ID', { maximumFractionDigits: 1 })} kg CO₂/tahun</strong></span>
+                        <span className="text-sm text-emerald-800/60 font-medium">Draft Emisi: <strong className="text-emerald-700 font-black">{(emissions.total).toLocaleString('id-ID', { maximumFractionDigits: 1 })} kg CO₂/hari</strong></span>
                       </div>
                       
                       <motion.button

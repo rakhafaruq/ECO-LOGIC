@@ -52,7 +52,7 @@ export const Results = ({ data, emissions }) => {
   })).filter(d => d.value > 0);
 
   const totalEmissions = parseFloat(emissions.total) || 0;
-  const treesNeeded = Math.ceil(totalEmissions / 22);
+  const treesNeeded = Math.max(1, Math.ceil((totalEmissions * 365) / 22));
 
   const tips = [
     { tip: "Turunkan resolusi YouTube ke 720p di HP.", icon: Youtube },
@@ -66,12 +66,12 @@ export const Results = ({ data, emissions }) => {
   let badgeIcon = <Flame className="w-5 h-5 text-amber-100" />
   let badgeDesc = "Jejak karbon digital Anda lebih tinggi dari rata-rata. Yuk mulai kurangi!";
 
-  if (totalEmissions < 50) {
+  if (totalEmissions < 0.14) {
     badgeTheme = "from-emerald-400 to-teal-500 shadow-emerald-500/30 border-emerald-300";
     badgeText = "Eco Master Digital";
     badgeIcon = <ShieldCheck className="w-5 h-5 text-emerald-50" />
     badgeDesc = "Luar biasa! Penggunaan digital Anda sangat efisien dan ramah lingkungan.";
-  } else if (totalEmissions < 150) {
+  } else if (totalEmissions < 0.41) {
     badgeTheme = "from-blue-400 to-indigo-500 shadow-blue-500/30 border-blue-300";
     badgeText = "Green Citizen";
     badgeIcon = <ActivitySquare className="w-5 h-5 text-blue-50" />
@@ -102,7 +102,7 @@ export const Results = ({ data, emissions }) => {
       pdf.text('ECO-LOGIC', pageW / 2, y + 6, { align: 'center' });
       pdf.setFontSize(9);
       pdf.setFont(undefined, 'normal');
-      pdf.text('Laporan Jejak Karbon Digital Tahunan', pageW / 2, y + 15, { align: 'center' });
+      pdf.text('Laporan Jejak Karbon Digital Harian', pageW / 2, y + 15, { align: 'center' });
       y += 35;
 
       // ── Date ──
@@ -119,7 +119,7 @@ export const Results = ({ data, emissions }) => {
       pdf.setTextColor(6, 78, 59); // emerald-950
       pdf.setFontSize(14);
       pdf.setFont(undefined, 'bold');
-      pdf.text('Total Jejak Karbon Digital Tahunan', pageW / 2, y + 5, { align: 'center' });
+      pdf.text('Total Jejak Karbon Digital Harian', pageW / 2, y + 5, { align: 'center' });
       pdf.setFontSize(28);
       pdf.setTextColor(16, 185, 129);
       
@@ -131,7 +131,7 @@ export const Results = ({ data, emissions }) => {
       // ── Equivalent ──
       pdf.setTextColor(80, 80, 80);
       pdf.setFontSize(10);
-      pdf.text(`Setara mengendarai mobil bensin sejauh ${(totalEmissions * 4).toFixed(0)} km`, pageW / 2, y, { align: 'center' });
+      pdf.text(`Setara mengendarai mobil bensin sejauh ${(totalEmissions * 4).toFixed(1)} km per hari`, pageW / 2, y, { align: 'center' });
       pdf.text(`Perlu menanam ${treesNeeded} pohon dewasa untuk menetralisir`, pageW / 2, y + 6, { align: 'center' });
       y += 18;
 
@@ -267,7 +267,7 @@ export const Results = ({ data, emissions }) => {
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', delay: 0.2 }}>
           <Cloud className="w-12 h-12 mx-auto mb-3 text-emerald-500" />
         </motion.div>
-        <p className="text-sm font-bold text-emerald-800/60 mb-1 uppercase tracking-wider relative z-10">Total Jejak Karbon Digital Tahunan</p>
+        <p className="text-sm font-bold text-emerald-800/60 mb-1 uppercase tracking-wider relative z-10">Total Jejak Karbon Digital Harian</p>
         <motion.p
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
           className="text-5xl sm:text-6xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2 relative z-10 drop-shadow-sm"
@@ -275,7 +275,7 @@ export const Results = ({ data, emissions }) => {
           {totalEmissions.toLocaleString('id-ID', { maximumFractionDigits: 1 })} <span className="text-2xl text-emerald-800">kg CO₂e</span>
         </motion.p>
         <p className="text-xs font-semibold text-emerald-800/70 max-w-sm mx-auto mt-3 relative z-10">
-          Setara dengan mengendarai mobil berbahan bakar bensin sejauh {(totalEmissions * 4).toFixed(0)} km.
+          Setara dengan mengendarai mobil berbahan bakar bensin sejauh {(totalEmissions * 4).toFixed(1)} km per hari.
         </p>
       </div>
 
@@ -307,7 +307,7 @@ export const Results = ({ data, emissions }) => {
           <div>
             <h3 className="text-sm font-black mb-1 text-emerald-800">Pohon Penyeimbang</h3>
             <p className="text-xs text-emerald-800/80 leading-relaxed font-bold">
-              Tanam <strong className="text-base bg-emerald-600 text-white px-2 py-0.5 rounded-md mx-1 shadow-sm">{treesNeeded}</strong> pohon dewasa untuk menetralisir karbon digital tahuan Anda.
+              Tanam <strong className="text-base bg-emerald-600 text-white px-2 py-0.5 rounded-md mx-1 shadow-sm">{treesNeeded}</strong> pohon dewasa untuk menetralisir karbon digital Anda selama setahun.
             </p>
           </div>
         </motion.div>

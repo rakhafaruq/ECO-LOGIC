@@ -172,7 +172,7 @@ export default function Calculator() {
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                         </div>
-                        <span className="text-sm text-emerald-800/60 font-medium">Draft Emisi: <strong className="text-emerald-700 font-black">{(emissions.total).toLocaleString('id-ID', { maximumFractionDigits: 1 })} kg</strong></span>
+                        <span className="text-sm text-emerald-800/60 font-medium">Draft Emisi: <strong className="text-emerald-700 font-black">{(emissions.total).toLocaleString('id-ID', { maximumFractionDigits: 1 })} kg CO₂/tahun</strong></span>
                       </div>
                       
                       <motion.button

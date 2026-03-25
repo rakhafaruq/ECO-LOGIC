@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { ActivitySquare, CheckCircle2, Cloud, ShieldCheck, LayoutDashboard, Share2, Download, Bot, Flame, TreePine, Youtube, MonitorPlay, Lightbulb, Sparkles } from 'lucide-react';
-import { motion } from 'motion/react';
+import { ActivitySquare, CheckCircle2, Cloud, ShieldCheck, LayoutDashboard, Share2, Download, Bot, Flame, TreePine, Youtube, MonitorPlay, Lightbulb, Sparkles, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import confetti from 'canvas-confetti';
 import { jsPDF } from 'jspdf';
@@ -10,6 +10,7 @@ import { CATEGORIES } from '../data/calculatorData';
 export const Results = ({ data, emissions }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const printRef = useRef(null);
 
   useEffect(() => {
@@ -43,6 +44,8 @@ export const Results = ({ data, emissions }) => {
     history.push(newEntry);
     localStorage.setItem('ecologic_history', JSON.stringify(history));
     setIsSaved(true);
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 3500);
   };
 
   const chartData = CATEGORIES.map(cat => ({
@@ -409,6 +412,68 @@ export const Results = ({ data, emissions }) => {
           Bagikan
         </button>
       </div>
+
+      {/* Success Popup Modal */}
+      <AnimatePresence>
+        {showPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+            onClick={() => setShowPopup(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-white rounded-[2rem] p-8 sm:p-10 max-w-sm w-full shadow-2xl border border-emerald-100 text-center"
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setShowPopup(false)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-emerald-50 hover:bg-emerald-100 flex items-center justify-center transition-colors"
+              >
+                <X className="w-4 h-4 text-emerald-700" />
+              </button>
+
+              {/* Success Icon */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', delay: 0.1, damping: 12 }}
+                className="w-20 h-20 mx-auto mb-5 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30"
+              >
+                <CheckCircle2 className="w-10 h-10 text-white" />
+              </motion.div>
+
+              <h3 className="text-xl font-black text-emerald-950 mb-2">Berhasil Disimpan!</h3>
+              <p className="text-sm text-emerald-800/60 font-medium leading-relaxed mb-6">
+                Data emisi harian Anda telah tersimpan ke Dashboard. Pantau progresmu secara berkala!
+              </p>
+
+              {/* Progress bar auto-close */}
+              <div className="w-full h-1.5 bg-emerald-100 rounded-full overflow-hidden mb-5">
+                <motion.div
+                  initial={{ width: '100%' }}
+                  animate={{ width: '0%' }}
+                  transition={{ duration: 3.5, ease: 'linear' }}
+                  className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"
+                />
+              </div>
+
+              <button
+                onClick={() => setShowPopup(false)}
+                className="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition-all shadow-md shadow-emerald-500/20"
+              >
+                Mengerti
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </motion.div>
   );

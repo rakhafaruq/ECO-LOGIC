@@ -3,7 +3,6 @@ import { ActivitySquare, CheckCircle2, Cloud, ShieldCheck, LayoutDashboard, Shar
 import { motion } from 'motion/react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import confetti from 'canvas-confetti';
-import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { CATEGORIES } from '../data/calculatorData';
 
@@ -88,19 +87,166 @@ export const Results = ({ data, emissions }) => {
   else if (highestCategory && highestCategory.name === 'Kerja & Cloud') botAdvice = "Banyak file Cloud menumpuk! Coba bersihkan G-Drive dari video atau foto lawas untuk meringankan beban server pusat.";
 
   const downloadPDF = async () => {
-    if(!printRef.current) return;
     setIsDownloading(true);
     try {
-      const element = printRef.current;
-      const canvas = await html2canvas(element, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Laporan_ECO-LOGIC_${new Date().getTime()}.pdf`);
+      const pageW = pdf.internal.pageSize.getWidth();
+      let y = 20;
+
+      // ── Header ──
+      pdf.setFillColor(16, 185, 129); // emerald-500
+      pdf.roundedRect(15, y - 5, pageW - 30, 28, 4, 4, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(20);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('ECO-LOGIC', pageW / 2, y + 6, { align: 'center' });
+      pdf.setFontSize(9);
+      pdf.setFont(undefined, 'normal');
+      pdf.text('Laporan Jejak Karbon Digital Tahunan', pageW / 2, y + 15, { align: 'center' });
+      y += 35;
+
+      // ── Date ──
+      pdf.setTextColor(100, 100, 100);
+      pdf.setFontSize(9);
+      const dateStr = new Date().toLocaleString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      const safeDate = dateStr.replace(/[^\x00-\x7F]/g, " ");
+      pdf.text(`Tanggal: ${safeDate}`, 20, y);
+      y += 12;
+
+      // ── Total Emissions Hero ──
+      pdf.setFillColor(240, 253, 244); // emerald-50
+      pdf.roundedRect(15, y - 5, pageW - 30, 35, 4, 4, 'F');
+      pdf.setTextColor(6, 78, 59); // emerald-950
+      pdf.setFontSize(14);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('Total Jejak Karbon Digital Tahunan', pageW / 2, y + 5, { align: 'center' });
+      pdf.setFontSize(28);
+      pdf.setTextColor(16, 185, 129);
+      
+      // FIX: Replace Unicode '₂' that crashes jsPDF with standard '2'
+      const safeNumber = totalEmissions.toFixed(1).replace('.', ',');
+      pdf.text(`${safeNumber} kg CO2e`, pageW / 2, y + 22, { align: 'center' });
+      y += 42;
+
+      // ── Equivalent ──
+      pdf.setTextColor(80, 80, 80);
+      pdf.setFontSize(10);
+      pdf.text(`Setara mengendarai mobil bensin sejauh ${(totalEmissions * 4).toFixed(0)} km`, pageW / 2, y, { align: 'center' });
+      pdf.text(`Perlu menanam ${treesNeeded} pohon dewasa untuk menetralisir`, pageW / 2, y + 6, { align: 'center' });
+      y += 18;
+
+      // ── Badge ──
+      pdf.setFillColor(6, 78, 59);
+      pdf.roundedRect(15, y - 3, pageW - 30, 16, 3, 3, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(11);
+      pdf.setFont(undefined, 'bold');
+      
+      const safeBadgeText = badgeText.replace(/[^\x00-\x7F]/g, ""); // strip unicode
+      const safeBadgeDesc = badgeDesc.replace(/[^\x00-\x7F]/g, "");
+      pdf.text(`Title: ${safeBadgeText}`, 22, y + 5);
+      pdf.setFontSize(8);
+      pdf.setFont(undefined, 'normal');
+      pdf.text(safeBadgeDesc, 22, y + 10, { maxWidth: pageW - 45 });
+      y += 24;
+
+      // ── Category Breakdown ──
+      pdf.setTextColor(6, 78, 59);
+      pdf.setFontSize(13);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('Distribusi Emisi Per Kategori', 20, y);
+      y += 8;
+
+      const barColors = {
+        'YouTube': [244, 63, 94],
+        'Streaming': [147, 51, 234],
+        'Sosial': [14, 165, 233],
+        'Kerja & Cloud': [16, 185, 129]
+      };
+
+      const maxVal = chartData.length > 0 ? Math.max(...chartData.map(d => d.value)) : 1;
+      chartData.forEach(item => {
+        pdf.setFontSize(10);
+        pdf.setFont(undefined, 'bold');
+        pdf.setTextColor(6, 78, 59);
+        const safeName = item.name.replace(/[^\x00-\x7F]/g, "");
+        pdf.text(safeName, 22, y + 4);
+
+        // Draw bar
+        const barW = Math.max(((item.value / maxVal) * (pageW - 100)), 2);
+        const color = barColors[item.name] || [16, 185, 129];
+        pdf.setFillColor(color[0], color[1], color[2]);
+        pdf.roundedRect(62, y - 1, barW, 7, 2, 2, 'F');
+
+        // Value label
+        pdf.setFontSize(9);
+        pdf.setFont(undefined, 'normal');
+        pdf.setTextColor(80, 80, 80);
+        pdf.text(`${item.value.toFixed(1).replace('.', ',')} kg`, 62 + barW + 3, y + 4);
+        y += 12;
+      });
+
+      if (chartData.length === 0) {
+        pdf.setFontSize(10);
+        pdf.setTextColor(150, 150, 150);
+        pdf.text('Tidak ada data emisi yang tersedia.', 22, y + 4);
+        y += 12;
+      }
+      y += 6;
+
+      // ── Tips ──
+      pdf.setTextColor(6, 78, 59);
+      pdf.setFontSize(13);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('Saran Diet Digital', 20, y);
+      y += 8;
+
+      tips.forEach((t, i) => {
+        pdf.setFontSize(9);
+        pdf.setFont(undefined, 'normal');
+        pdf.setTextColor(60, 60, 60);
+        const safeTip = t.tip.replace(/[^\x00-\x7F]/g, "");
+        pdf.text(`${i + 1}. ${safeTip}`, 22, y);
+        y += 7;
+      });
+      y += 6;
+
+      // ── AI Eco-Bot Advice ──
+      pdf.setFillColor(6, 78, 59);
+      pdf.roundedRect(15, y - 3, pageW - 30, 20, 3, 3, 'F');
+      pdf.setTextColor(52, 211, 153);
+      pdf.setFontSize(9);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('ECO-BOT AI INSIGHTS', 22, y + 4);
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(9);
+      pdf.setFont(undefined, 'normal');
+      const safeBot = botAdvice.replace(/[^\x00-\x7F]/g, "");
+      pdf.text(`"${safeBot}"`, 22, y + 11, { maxWidth: pageW - 45 });
+      y += 28;
+
+      // ── Footer ──
+      pdf.setDrawColor(200, 200, 200);
+      pdf.line(20, y, pageW - 20, y);
+      y += 6;
+      pdf.setTextColor(160, 160, 160);
+      pdf.setFontSize(8);
+      pdf.text('Dokumen ini dihasilkan otomatis oleh ECO-LOGIC Carbon Calculator.', pageW / 2, y, { align: 'center' });
+      pdf.text('https://eco-logic.app', pageW / 2, y + 5, { align: 'center' });
+
+      // FIX: Force strictly as PDF Blob downloaded via Anchor tag
+      const pdfBlob = pdf.output('blob');
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `Laporan_ECO-LOGIC_${new Date().getTime()}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+
     } catch(err) {
-      console.error(err);
+      console.error('PDF generation error:', err);
       alert('Gagal membuat PDF.');
     } finally {
       setIsDownloading(false);

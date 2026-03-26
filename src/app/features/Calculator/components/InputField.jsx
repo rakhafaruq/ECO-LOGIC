@@ -11,9 +11,9 @@ export const InputField = ({ field, value, onChange }) => {
     setIsAnalyzing(true);
     setTimeout(() => {
       let vidId = '';
-      if(url.includes('v=')) vidId = url.split('v=')[1].substring(0, 11);
-      else if(url.includes('youtu.be/')) vidId = url.split('youtu.be/')[1].substring(0, 11);
-      
+      if (url.includes('v=')) vidId = url.split('v=')[1].substring(0, 11);
+      else if (url.includes('youtu.be/')) vidId = url.split('youtu.be/')[1].substring(0, 11);
+
       setVideoData({
         title: "Video Terdeteksi dari URL",
         thumbnail: `https://i.ytimg.com/vi/${vidId || 'dQw4w9WgXcQ'}/hqdefault.jpg`,
@@ -39,7 +39,7 @@ export const InputField = ({ field, value, onChange }) => {
           />
           <Youtube className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-800/40" />
         </div>
-        
+
         <AnimatePresence>
           {isAnalyzing && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex items-center gap-3 p-3 bg-emerald-50/50 rounded-xl border border-emerald-100 overflow-hidden">
@@ -79,8 +79,8 @@ export const InputField = ({ field, value, onChange }) => {
                 key={opt.value}
                 onClick={() => onChange(opt.value)}
                 className={`relative p-3 rounded-xl border-2 text-left transition-all overflow-hidden group
-                  ${isActive 
-                    ? 'border-emerald-500 bg-white shadow-md' 
+                  ${isActive
+                    ? 'border-emerald-500 bg-white shadow-md'
                     : 'border-emerald-900/10 bg-white/60 hover:bg-white hover:border-emerald-300'}`}
               >
                 {isActive && <div className="absolute inset-0 bg-emerald-500/5 pointer-events-none" />}

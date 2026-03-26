@@ -6,7 +6,7 @@ export default function Contact() {
     <div className="min-h-screen bg-transparent text-emerald-950 pt-10 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4 drop-shadow-sm">Hubungi Kami</h1>
+          <h1 className="text-4xl font-black text-emerald-950 mb-4 drop-shadow-sm">Hubungi Kami</h1>
           <p className="text-emerald-900/70 text-lg font-bold">Ada pertanyaan atau ide kerja sama? Kirimkan pesan!</p>
         </div>
 
@@ -19,7 +19,7 @@ export default function Contact() {
               </div>
               <div>
                 <p className="text-emerald-900/50 text-sm font-bold uppercase tracking-wider">Email</p>
-                <p className="font-bold text-emerald-950 text-lg">hello@eco-logic.id</p>
+                <p className="font-bold text-emerald-950 text-lg">masrakha09@gmail.com</p>
               </div>
             </div>
 
@@ -39,7 +39,7 @@ export default function Contact() {
               </div>
               <div>
                 <p className="text-emerald-900/50 text-sm font-bold uppercase tracking-wider">Lokasi</p>
-                <p className="font-bold text-emerald-950 text-lg">Jakarta, Indonesia</p>
+                <p className="font-bold text-emerald-950 text-lg">Bandung, Indonesia</p>
               </div>
             </div>
           </div>

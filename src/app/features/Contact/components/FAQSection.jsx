@@ -30,14 +30,6 @@ export const FAQSection = () => {
       q: "Bagaimana cara mengurangi jejak karbon digital saya?",
       a: "Beberapa cara mudah: turunkan resolusi streaming video jika tidak perlu 4K/HD, matikan transmisi video saat virtual meeting jika hanya butuh suara, hapus email beserta lampiran yang menumpuk di kotak masuk, dan optimalkan penggunaan memori cloud."
     },
-    {
-      q: "Apa hubungan Eco-Logic dengan INNOVATE 2026?",
-      a: "Eco-Logic adalah karya yang disubmit untuk kompetisi INNOVATE 2026 dengan tema Sustainability. Kami percaya bahwa inovasi digital harus sejalan dengan kelestarian lingkungan, dan platform ini adalah wujud nyata dari visi tersebut."
-    },
-    {
-      q: "Bisakah saya menggunakan Eco-Logic untuk organisasi atau kampus?",
-      a: "Tentu! Kami mendorong penggunaan Eco-Logic untuk edukasi dan awareness di organisasi, kampus, atau komunitas. Jika butuh customization atau fitur tambahan, silakan hubungi kami melalui form di halaman ini."
-    }
   ];
 
   return (

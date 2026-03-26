@@ -35,9 +35,7 @@ export default function About() {
         {/* Sections */}
         <MissionSection />
         <MethodologySection />
-        <InnovateSection />
         <WebsiteCarbonSection />
-        <ApproachSection />
       </div>
     </div>
   );

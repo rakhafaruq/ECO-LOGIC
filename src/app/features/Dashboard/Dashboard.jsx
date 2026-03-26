@@ -9,24 +9,24 @@ import { HistoryChart } from './components/HistoryChart';
 
 export default function Dashboard() {
   const [history, setHistory] = useState([]);
-  const [budget, setBudget] = useState(150); // Default monthly target in kg
+  const [budget, setBudget] = useState(150);
   const [isSettingMode, setIsSettingMode] = useState(false);
   const [newBudget, setNewBudget] = useState('');
-
+  
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('ecologic_history') || '[]');
     setHistory(saved);
     const savedBudget = localStorage.getItem('ecologic_budget');
     if(savedBudget) setBudget(parseFloat(savedBudget));
   }, []);
-
+  
   const clearHistory = () => {
     if (confirm('Yakin hapus jejak lokal Anda?')) {
       localStorage.removeItem('ecologic_history');
       setHistory([]);
     }
   };
-
+  
   const saveBudget = () => {
     if(newBudget && !isNaN(newBudget) && parseFloat(newBudget) > 0) {
       localStorage.setItem('ecologic_budget', newBudget);
@@ -34,15 +34,16 @@ export default function Dashboard() {
     }
     setIsSettingMode(false);
   };
-
-  const hasData = history.length > 0;
   
-  // Calculate specific metrics
+  const hasData = history.length > 0;
   const latestEmissions = hasData ? parseFloat(history[history.length - 1].total) : 0;
   
-  // PieChart Data for Budget
-  const budgetPercentage = Math.min((latestEmissions / budget) * 100, 100);
-  const isOverBudget = latestEmissions > budget;
+  const currentMonthEmissions = history
+    .slice(-30) 
+    .reduce((sum, entry) => sum + parseFloat(entry.total), 0);
+  
+  const budgetPercentage = Math.min((currentMonthEmissions / budget) * 100, 100);
+  const isOverBudget = currentMonthEmissions > budget;
   
   const ringData = [
     { name: 'Used', value: budgetPercentage },
@@ -54,7 +55,18 @@ export default function Dashboard() {
     total: parseFloat(entry.total),
   }));
 
-  const NATIONAL_AVG = 300; // Mock 300kg/year national average
+  const getMonthlyBadge = (monthlyTotal) => {
+    if (monthlyTotal < 10) {
+      return { title: "Eco Master", theme: "from-emerald-400 to-teal-600", icon: "👑", desc: "Luar biasa! Penggunaan digital Anda bulan ini sangat efisien." };
+    } else if (monthlyTotal <= budget) {
+      return { title: "Green Citizen", theme: "from-blue-400 to-indigo-500", icon: "🛡️", desc: "Jejak digital bulanan Anda seimbang dan terkendali di bawah batas aman." };
+    } else {
+      return { title: "Digital Explorer", theme: "from-amber-500 to-orange-600", icon: "🔥", desc: `Emisi Anda bulan ini melebihi target. Kurangi "${latestEmissions?.highestCategory || 'Streaming'}" hari ini!` };
+    }
+  };
+
+  const currentBadge = hasData ? getMonthlyBadge(currentMonthEmissions) : null;
+  const NATIONAL_AVG = 300;
 
   return (
     <div className="min-h-screen bg-transparent text-emerald-950 px-4 pb-20 pt-8">
@@ -67,8 +79,8 @@ export default function Dashboard() {
             <h1 className="text-xl font-bold tracking-tight">Dashboard Personal</h1>
           </div>
           {hasData && (
-            <button onClick={clearHistory} className="text-xs font-bold text-rose-500 hover:bg-rose-50 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-              <Trash2 className="w-3 h-3" /> Reset History
+            <button onClick={clearHistory} className="text-xs font-bold text-rose-500 hover:bg-rose-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 cursor-pointer">
+              <Trash2 className="w-3 h-3" /> Hapus Riwayat
             </button>
           )}
         </div>
@@ -101,7 +113,7 @@ export default function Dashboard() {
               saveBudget={saveBudget} 
             />
 
-            <NationalCompare latestEmissions={latestEmissions} NATIONAL_AVG={NATIONAL_AVG} />
+            <NationalCompare currentMonthEmissions={currentMonthEmissions} NATIONAL_AVG={NATIONAL_AVG} badge={currentBadge} historyLength={history.length}/>
 
             <HistoryChart historyLength={history.length} chartData={chartData} />
 

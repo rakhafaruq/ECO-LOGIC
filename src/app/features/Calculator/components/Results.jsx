@@ -39,7 +39,7 @@ export const Results = ({ data, emissions }) => {
       youtube: emissions.youtube,
       streaming: emissions.streaming,
       social: emissions.social,
-      work: emissions.work
+      work: emissions.work,
     };
     history.push(newEntry);
     localStorage.setItem('ecologic_history', JSON.stringify(history));

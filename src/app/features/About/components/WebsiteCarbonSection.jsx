@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 
 export const WebsiteCarbonSection = () => {
   return (
-    <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-0 lg:pt-28 lg:pb-0">
+    <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
       <div className="text-center mb-16">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
@@ -29,10 +29,6 @@ export const WebsiteCarbonSection = () => {
         <p className="text-emerald-800/80 font-medium text-lg leading-relaxed max-w-2xl mx-auto mb-10">
           Kami juga berkomitmen untuk menjaga website Eco-Logic tetap ramah lingkungan dengan optimasi performa dan hosting hijau.
         </p>
-
-        <div className="text-sm font-semibold text-emerald-600/60 max-w-lg mx-auto">
-          Data tidak tersedia. Website Carbon API mungkin sedang down atau URL belum terdaftar. Coba lagi setelah website ini di-deploy ke produksi.
-        </div>
       </motion.div>
     </div>
   );

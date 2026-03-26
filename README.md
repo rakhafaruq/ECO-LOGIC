@@ -27,4 +27,4 @@ Tujuan utama dari ECO-LOGIC adalah meningkatkan kesadaran (*awareness*) masyarak
 - **UI Icons:** Lucide React
 
 ## Link Website
-https://eco-logic-rakhafaruq.vercel.app
+https://eco-logic-theta.vercel.app/

@@ -1,12 +1,30 @@
-# React + Vite
+# ECO-LOGIC | Kalkulator Jejak Karbon Digital
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Institusi
+Telkom University
 
-Currently, two official plugins are available:
+## Anggota Tim
+- **Ketua:** Muhammad Rakha Alfaruq
+- **Anggota 1:** Syarief Saleh Madhy
+- **Anggota 2:** Mochamad Rizky Maulana Aviansyah
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Deskripsi Karya
+**ECO-LOGIC** adalah sebuah aplikasi web interaktif yang dirancang untuk menghitung dan memvisualisasikan jejak karbon digital pengguna. Aplikasi ini dibangun dengan latar belakang bahwa aktivitas digital sehari-hari — seperti streaming video, mengirim email, menyimpan file di cloud, dan menggunakan media sosial — turut menyumbang emisi karbon melalui konsumsi energi listrik pada pusat data, jaringan internet, dan perangkat pengguna.
 
-## Expanding the ESLint configuration
+Tujuan utama dari ECO-LOGIC adalah meningkatkan kesadaran (*awareness*) masyarakat terhadap dampak lingkungan dari aktivitas digital mereka. Dengan menyediakan kalkulator karbon yang mudah digunakan, dashboard visualisasi data emisi, serta edukasi mengenai fakta-fakta jejak karbon digital, aplikasi ini mendorong pengguna untuk melakukan **"Digital Diet"** — menggunakan internet secara lebih efisien dan bertanggung jawab.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Fitur Utama
+- 🧮 **Kalkulator Karbon Digital** — Menghitung estimasi emisi CO₂ berdasarkan kebiasaan penggunaan perangkat digital harian pengguna.
+- 📊 **Dashboard Visualisasi** — Menampilkan ringkasan dan grafik emisi karbon untuk membantu pengguna memahami pola konsumsi digital mereka.
+- 📄 **Ekspor Laporan PDF** — Menghasilkan laporan jejak karbon dalam format PDF yang dapat diunduh dan dibagikan.
+- 📚 **Edukasi Jejak Karbon** — Menyajikan fakta dan informasi mengenai dampak karbon dari aktivitas digital.
+
+### Teknologi yang Digunakan
+- **Frontend:** React 19, Vite, TailwindCSS 4
+- **Visualisasi:** Recharts
+- **Animasi:** Motion (Framer Motion)
+- **PDF Generation:** jsPDF, html2canvas
+- **UI Icons:** Lucide React
+
+## Link Website
+https://eco-logic-rakhafaruq.vercel.app

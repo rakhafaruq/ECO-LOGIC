@@ -1,4 +1,5 @@
 import { Mail, MapPin, Phone } from 'lucide-react';
+import { FAQSection } from './components/FAQSection';
 
 export default function Contact() {
   return (
@@ -21,7 +22,7 @@ export default function Contact() {
                 <p className="font-bold text-emerald-950 text-lg">hello@eco-logic.id</p>
               </div>
             </div>
-            
+
             <div className="p-6 rounded-3xl bg-white/80 border border-emerald-900/10 shadow-lg backdrop-blur-xl flex items-center gap-4 hover:shadow-xl transition-all">
               <div className="w-12 h-12 bg-teal-100 rounded-xl border border-teal-200 flex items-center justify-center shrink-0">
                 <Phone className="w-6 h-6 text-teal-600" />
@@ -59,12 +60,14 @@ export default function Contact() {
                 <textarea rows="4" className="w-full px-4 py-3 bg-white border border-emerald-200 rounded-xl text-emerald-950 placeholder-emerald-900/30 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all shadow-sm" placeholder="Tuliskan pesan Anda di sini..."></textarea>
               </div>
               <button className="w-full py-3 px-6 rounded-xl bg-emerald-600 border border-emerald-500 shadow-[0_4px_15px_rgba(16,185,129,0.3)] text-white font-bold text-lg hover:bg-emerald-500 hover:shadow-[0_4px_20px_rgba(16,185,129,0.4)] transition-all">
-                Kirim Pesan (Simulasi)
+                Kirim Pesan
               </button>
             </form>
           </div>
         </div>
       </div>
+
+      <FAQSection />
     </div>
   );
 }
